@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/index.css') }}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="container-left">
+        <div class="srt-img">
+          <img src="../static/img/srtlogo.png" />
+        </div>
+        <form name="userData">
+        <div class="input-group mb-3">
+          <span class="input-group-text">회원번호</span>
+            <input
+              type="text"
+              name="memberNumber"
+              id="memberNumber"
+              class="form-control"
+              required
+            />
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">비밀번호</span>
+            <input
+              type="password"
+              name="memberPassword"
+              id="memberPassword"
+              class="form-control"
+              required/>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">출발역</span>
+          <select
+            name="dep"
+            class="form-select"
+          >
+            <option value="수서">수서</option>
+            <option value="동대구">동대구</option>
+            <option value="부산">부산</option>
+            <option value="대전">대전</option>
+          </select>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">도착역</span>
+            <select
+              name="arr"
+              class="form-select"
+            >
+              <option value="동대구">동대구</option>
+              <option value="수서">수서</option>
+              <option value="부산">부산</option>
+              <option value="대전">대전</option>
+            </select>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">날짜</span>
+            <input
+              type="date"
+              name="date"
+              id="date"
+              value="2023-04-09"
+              class="form-control"
+            />
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">시간</span>
+            <input
+              type="time"
+              name="time"
+              id="time"
+              value="13:00:00"
+              class="form-control"
+            />
+        </div>     
+        <button type="button" class="btn" onclick="getPyData();">예약자 정보 제출하기</button></div>
+      <div class="container-right">
+        <ul class="getPyResult list-group"></ul>
+      </div>
+      
+      </form>
+      
+    </div>
+    <script>
+      const forms = document.forms["userData"];
+      const getPyResult = document.querySelector(".getPyResult");
+
+      const offset = 1000 * 60 * 60 * 9
+      const koreaNow = new Date((new Date()).getTime() + offset);
+      
+      document.querySelector('#date').value = new Date().toISOString().substring(0, 10);
+      document.querySelector('#time').value = koreaNow.toISOString().slice(11, 16);
+      const sendListData = async (idx) => {
+        await axios({
+          method: "POST",
+          url: "/goWhile",
+          data: { idx: idx },
+        }).then((res) => {
+          console.log(
+            res.data.includes("Error")
+              ? console.log(res.data)
+              : Swal.fire({
+                title: '예약 성공 !',
+                text: `${res.data}`,
+                icon: 'success',
+              })
+          );
+        });
+      };
+
+      const swalFunc = (idx) => {
+        Swal.fire({
+          title: '매크로를 시작하시겠습니까?',
+          text: "시작후 취소 가능합니다...",
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#683f62',
+          cancelButtonColor: '#888',
+          confirmButtonText: '제출',
+          cancelButtonText: '취소',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            macroFunction(idx);  
+          }
+        })
+      }
+
+      const macroFunction = (idx, j = 1) => {
+        async function timer(){
+          await setTimeout(() => {
+          axios({
+            method: "POST",
+            url: "/goWhile",
+            data: { idx: idx },
+          }).then((res) => {
+            getPyResult.innerHTML = `${j}번째 실행중...`;
+            console.log(
+              res.data.includes("Error") ? macroFunction(idx , j + 1) :
+                Swal.fire({
+                  title: '예약 완료 !',
+                  text : `${res.data}`,
+                  icon: 'success',
+              })
+            );
+          });
+        }, 1000);
+        }
+        timer();
+      };
+
+      const getPyData = () => {
+        getPyResult.innerHTML = "";
+        const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+        const formData = {
+          memberNumber: forms.memberNumber.value,
+          memberPassword: forms.memberPassword.value,
+          dep: forms.dep.value,
+          arr: forms.arr.value,
+          date: forms.date.value.replace(reg, ""),
+          time: forms.time.value.replace(reg, "") + "00",
+        };
+        console.log(formData);
+        axios({
+          method: "POST",
+          url: "/postUserData",
+          data: formData,
+        })
+          .then((res) => {
+            // macroFunction(${i - 1})
+            let slicingDataArr = res.data.slice(1).slice(0, -1).split("[SRT]");
+            for (let i = 1; i < slicingDataArr.length; i++) {
+              let li = document.createElement("li");
+              let btn = document.createElement("button");
+              let btn2 = document.createElement("button");
+              let btnGroup = document.createElement('div');
+              btnGroup.setAttribute('class','btn-group')
+              btn.setAttribute("onclick", `sendListData(${i - 1});`);
+              btn2.setAttribute("onclick", `swalFunc(${i - 1})`);
+              btn.setAttribute('class','btn');
+              btn2.setAttribute('class','btn');
+              li.setAttribute('class','list-group-item');
+              btn.innerHTML = "예약하기";
+              btn2.innerHTML = "매크로시작";
+              li.append(slicingDataArr[i]);
+              li.append(btnGroup)
+              btnGroup.append(btn);
+              btnGroup.append(btn2);
+              getPyResult.append(li);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+    </script>
+  </body>
+</html>

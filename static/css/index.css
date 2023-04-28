@@ -1,0 +1,117 @@
+@font-face {
+    font-family: SDneo;
+    src: url('../font/AppleSDGothicNeoL.ttf');
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+    font-family: SDneo;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+.container {
+    position: relative;
+    top: 5vh;
+    margin: 0 auto;
+    margin-bottom: 5vh;
+    display: flex;
+    flex-direction: row;
+    box-shadow: rgba(0, 0, 0, 0.08) 2px 4px 12px;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.container-left {
+    width: 30%;
+    height: 100%;
+}
+
+.container-left label {
+    margin-top: .5rem;
+}
+
+.container-right {
+    width: 70%;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 1rem;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    background-color: #4C2F48;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.btn:hover {
+    background-color: #683f62;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.btn-group {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.list-group-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 1.3rem;
+}
+
+span {
+    min-width: 6rem;
+    justify-content: center;
+}
+
+img {
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+    padding: 2rem 0;
+}
+
+@media screen and (max-width:998px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .container-left {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .container-right {
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 2rem;
+    }
+
+    .list-group-item {
+        font-size: 1rem !important;
+    }
+}
+
+@media screen and (max-width:768px) {
+    html {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width:450px) {
+    html {
+        font-size: 10px;
+    }
+}
