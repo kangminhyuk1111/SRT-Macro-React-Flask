@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, jsonify
 from SRT import SRT
 import time
-app = Flask(__name__) 		#2
+app = Flask(__name__)
 
-@app.route("/") 		#3
-def hello():			#4
+@app.route("/") 	
+def hello():			
     return render_template('index.html')
 
 @app.route("/userData",methods=['POST'])
