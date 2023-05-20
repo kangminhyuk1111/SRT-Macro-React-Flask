@@ -1,5 +1,6 @@
 # SRT 자동매매 매크로 웹사이트🚇 (진행중)
-![image](https://github.com/kangminhyuk1111/SRT-Macro-React-Flask/assets/96116158/eda29f09-0b6c-482e-a242-0ad3cf37a068)
+![ezgif com-video-to-gif (19)](https://github.com/kangminhyuk1111/SRT-Macro-React-Flask/assets/96116158/78a62839-3f6c-4e89-a013-892417fcae33)
+
 
 ## 기간
 2023-04-25 ~ ing
