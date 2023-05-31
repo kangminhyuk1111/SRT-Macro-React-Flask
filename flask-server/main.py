@@ -5,7 +5,11 @@ app = Flask(__name__)
 
 @app.route("/") 	
 def hello():			
-    return render_template('index.html')
+    return 'Hello world !'
+
+@app.route("/user")
+def user():
+    return 'Hello User !'
 
 @app.route("/userData",methods=['POST'])
 def userData():
@@ -36,4 +40,4 @@ def errorHandler_500(err):
     return f"{err}"
 
 if __name__ == "__main__": 	#5
-    app.run()
+    app.run(debug=True)
